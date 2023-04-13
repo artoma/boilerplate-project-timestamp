@@ -23,6 +23,20 @@ app.get("/", function (req, res) {
 app.get("/api", function (req, res) {
   res.json({unix: new Date().getTime(), utc: new Date().toUTCString()});
 });
+
+app.get("/api/:date", function (req, res) {
+  const regex = /^\d{13}$/
+  if(regex.test(req.params.date)){
+    res.json({unix: parseInt(req.params.date), utc: new Date(parseInt(req.params.date)).toUTCString()})
+  }
+  let parsedDate = Date.parse(req.params.date)
+  if(parsedDate){
+    res.json({unix: parsedDate, utc: new Date(parsedDate).toUTCString()});
+  } else {
+    res.json({error: "Invalid Date"});
+  }
+
+});
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
